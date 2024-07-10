@@ -1,0 +1,72 @@
+﻿@using GameTracker.Models
+@model PartialPage
+
+<script>
+    window.pageManager.setPage(pageTypes.register);
+
+    $('#register').submit(function (event) {
+        event.preventDefault();
+
+        $.ajax({
+            url: 'api/Account/Register',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(Json.Serialize(Model)),
+            success: function (user) {
+                window.userManager.registerUser(@Json.Serialize(@Model));
+                alert('User Registered!!');
+                window.pageManager.setPage(pageTypes.home);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error sending data to server:', xhr.responseText);
+                alert('Incorrect User Details.');
+            }
+        });
+    });
+</script>
+
+<h5>@Model.PageTitle</h5>
+
+<div class="container align-content-center d-flex">
+    <form id="register" class="form-horizontal" model="@Model.User">
+        <div class="form-container">
+            <div class="column-one">
+                <div class="form-item">
+                    <label asp-for="@Model.User.Name">Name</label>
+                    <input asp-for="@Model.User.Name" />
+                </div>
+                <span asp-validation-for="@Model.User.Name" class="text-danger"></span>
+
+                <div class="form-item">
+                    <label asp-for="@Model.User.Surname">Surname</label>
+                    <input asp-for="@Model.User.Surname" />
+                </div>
+                <span asp-validation-for="@Model.User.Surname" class="text-danger"></span>
+
+                <div class="form-item">
+                    <label asp-for="@Model.User.BirthDate">Birth Date</label>
+                    <input asp-for="@Model.User.BirthDate" type="date" />
+                </div>
+                <span asp-validation-for="@Model.User.BirthDate" class="text-danger"></span>
+            </div>
+            <div class="column-two">
+
+                <div class="form-item">
+                    <label asp-for="@Model.User.Username">Username</label>
+                    <input asp-for="@Model.User.Username" />
+                </div>
+                <span asp-validation-for="@Model.User.Username" class="text-danger"></span>
+
+                <div class="form-item">
+                    <label asp-for="@Model.User.Password">Password</label>
+                    <input asp-for="@Model.User.Password" type="password" />
+                </div>
+                <span asp-validation-for="@Model.User.Password" class="text-danger"></span>
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
