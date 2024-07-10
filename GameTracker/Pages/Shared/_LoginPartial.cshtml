@@ -1,0 +1,58 @@
+﻿@using GameTracker.Models
+@model PartialPage
+
+<script>
+    window.pageManager.setPage(pageTypes.login);
+
+    $('#login').submit(function (event) {
+        event.preventDefault();
+
+        var formData = {
+            users: window.storage.users,
+            user: @Html.Raw(Json.Serialize(Model))
+                };
+
+        $.ajax({
+            url: 'api/Account/Login',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (user) {
+                window.storage.currentUser = user;
+                window.pageManager.setPage(pageTypes.home);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error sending data to server:', xhr.responseText);
+                alert('Incorrect User Details.');
+            }
+        });
+    });
+</script>
+
+<h5>@Model.PageTitle</h5>
+
+<div class="container align-content-center d-flex">
+    <form id="login" class="form-horizontal" model="@Model.User">
+        <div class="form-container">
+            <div class="column-one">
+                <div class="form-item">
+                    <label asp-for="@Model.User.Username">Username</label>
+                    <input asp-for="@Model.User.Username" />
+                </div>
+                <span asp-validation-for="@Model.User.Username" class="text-danger"></span>
+            </div>
+            <div class="column-two">
+                <div class="form-item">
+                    <label asp-for="@Model.User.Password">Password</label>
+                    <input asp-for="@Model.User.Password" type="password" />
+                </div>
+                <span asp-validation-for="@Model.User.Password" class="text-danger"></span>
+
+                <div class="d-flex justify-content-end">
+                    <button onclick="storage.pageManager.loadRegisterView()" class="btn btn-primary m-2">Register</button>
+                    <button type="submit" class="btn btn-primary m-2">Login</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
