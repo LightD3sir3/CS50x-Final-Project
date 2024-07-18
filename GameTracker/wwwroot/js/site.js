@@ -59,10 +59,10 @@ class homePage {
     title = pageTypes.home;
 
     constructor() {
-        this.isloggedIn();
+        this.isLoggedIn();
     }
 
-    isloggedIn() {
+    isLoggedIn() {
         if (window.storage.currentUser.isLoggedIn) {
             const url = `api/Home/HomeView`;
 
@@ -124,7 +124,7 @@ class user {
     fortnite = new gameScore();
     leagueoflegends = new gameScore();
     callofduty = new gameScore();
-    isloggedIn = false;
+    isLoggedIn = false;
 
     constructor() {
 
